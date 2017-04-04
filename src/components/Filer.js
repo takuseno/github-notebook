@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import '../styles/filer.css'
 
 const Row = ({ file, onClick }) => (
   <li onClick={() => onClick(file)}>

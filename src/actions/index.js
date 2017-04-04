@@ -106,3 +106,9 @@ export function loadFiles (repository) {
       })
   }
 }
+
+export function changeMode () {
+  return {
+    type: 'CHANGE_MODE'
+  }
+}
