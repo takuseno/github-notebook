@@ -2,4 +2,24 @@
   overflow: hidden;
   width: auto;
   border: 1px solid transparent;
+  height: 100%;
+  border-left: 1px solid #eee;
+  .CodeMirror {
+    height: 100%;
+  }
+  .buttons {
+    button {
+      height: 30px;
+      width: 80px;
+      color: #03A9F4;
+      border: 1px solid #03A9F4;
+      background: #fff;
+      border-radius: 2px;
+      margin: 3px;
+      &:hover {
+        background: #03A9F4;
+        color: #fff;
+      }
+    }
+  }
 }

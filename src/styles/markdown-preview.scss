@@ -1,0 +1,12 @@
+.markdown-preview {
+  height: 100%;
+  padding: 3px;
+  code {
+    border-radius: 3px;
+  }
+  p {
+    code {
+      background: #eee;
+    }
+  }
+}
