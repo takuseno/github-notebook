@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { saveFile, updateFile, clickFile, loadFiles, changeMode } from '../actions'
 import Editor from '../components/Editor'
 import Filer from '../components/Filer'
+import Header from '../components/Header'
 import '../styles/app.css'
 
 class App extends React.Component {
@@ -15,17 +16,22 @@ class App extends React.Component {
     const { files, repository, currentFile, currentContent, uiStatus, dispatch } = this.props
     return (
       <div className='app'>
-        <Filer
-          files={files}
-          onClick={(file) => dispatch(clickFile(repository, file))}>
-        </Filer>
-        <Editor
+        <Header
           isPreview={uiStatus.get('isPreview')}
-          content={currentContent}
-          onUpdated={(content) => dispatch(updateFile(currentFile, content))}
-          onSaved={(content) => dispatch(saveFile(repository, currentFile, content))}
+          onSaved={() => dispatch(saveFile(repository, currentFile, currentContent))}
           onChangeMode={() => dispatch(changeMode())}>
-        </Editor>
+        </Header>
+        <div className='content'>
+          <Filer
+            files={files}
+            onClick={(file) => dispatch(clickFile(repository, file))}>
+          </Filer>
+          <Editor
+            isPreview={uiStatus.get('isPreview')}
+            content={currentContent}
+            onUpdated={(content) => dispatch(updateFile(currentFile, content))}>
+          </Editor>
+        </div>
       </div>
     )
   }

@@ -5,16 +5,9 @@ import '../styles/editor.css'
 require('codemirror/lib/codemirror.css')
 require('codemirror/mode/markdown/markdown')
 
-const Editor = ({ content, isPreview, onUpdated, onSaved, onChangeMode }) => (
+const Editor = ({ content, isPreview, onUpdated }) => (
   <div
     className='editor'>
-      <div className='buttons'>
-        <button onClick={() => onSaved(content)}>Save</button>
-        <button
-          onClick={() => onChangeMode()}>
-          {isPreview ? 'Edit' : 'Preview'}
-        </button>
-      </div>
       <div className='view'>
         {isPreview
           ? <MarkdownPreview
@@ -33,9 +26,7 @@ const Editor = ({ content, isPreview, onUpdated, onSaved, onChangeMode }) => (
 Editor.propTypes = {
   content: PropTypes.string.isRequired,
   isPreview: PropTypes.bool.isRequired,
-  onUpdated: PropTypes.func.isRequired,
-  onSaved: PropTypes.func.isRequired,
-  onChangeMode: PropTypes.func.isRequired
+  onUpdated: PropTypes.func.isRequired
 }
 
 export default Editor
