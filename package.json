@@ -7,17 +7,18 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build-css": "node-sass src/styles/ -o src/styles/"
+    "build-css": "node-sass src/styles/ -o src/styles/",
+    "electron": "electron ."
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "codemirror": "^5.25.0",
     "electron": "^1.6.2",
+    "highlightjs": "^9.10.0",
     "immutable": "^3.8.1",
     "katex": "^0.7.1",
     "markdown-it": "^8.3.1",
-    "markdown-it-highlightjs": "^3.0.0",
     "markdown-it-math": "^4.0.1",
     "moment": "^2.18.1",
     "octonode": "^0.7.10",

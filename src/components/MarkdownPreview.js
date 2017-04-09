@@ -1,6 +1,6 @@
 import React from 'react'
 import MarkdownIt from 'markdown-it'
-import MarkdownHighlight from 'markdown-it-highlightjs'
+import hljs from 'highlightjs'
 import MarkdownMath from 'markdown-it-math'
 import '../styles/markdown-preview.css'
 import '../styles/monokai.css'
@@ -9,8 +9,17 @@ const renderMarkdown = (code) => {
   const md = new MarkdownIt({
     typographer: true,
     html: true,
-  }).use(MarkdownHighlight)
-    .use(MarkdownMath, {
+    highlight: (str, lang) => {
+      if (lang && hljs.getLanguage(lang)) {
+        try {
+          return '<pre class="hljs"><code>' +
+            hljs.highlight(lang, str, true).value +
+            '</code></pre>'
+        } catch (__) {}
+      }
+      return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>'
+    }
+  }).use(MarkdownMath, {
       inlineOpen: '\\(',
       inlineClose: '\\)',
       blockOpen: '\\[',
