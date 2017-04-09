@@ -23,8 +23,10 @@ const renderMarkdown = (code) => {
 
 const MarkdownPreview = ({ code }) => (
   <div 
-    className='markdown-preview'
-    dangerouslySetInnerHTML={renderMarkdown(code)}>
+    className='markdown-preview'>
+    <div className='preview'
+      dangerouslySetInnerHTML={renderMarkdown(code)}>
+    </div>
   </div>
 )
 
