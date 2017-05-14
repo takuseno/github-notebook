@@ -20,11 +20,8 @@ const renderMarkdown = (code) => {
       return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>'
     }
   }).use(MarkdownMath, {
-      inlineOpen: '\\(',
-      inlineClose: '\\)',
-      blockOpen: '\\[',
-      blockClose: '\\]'
-    })
+    renderingOptions: { decimalMark: ',' }
+  })
   return {
     __html: md.render(code)
   }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { saveFile, updateFile, clickFile, loadFiles, changeMode } from '../actions'
+import { saveFile, updateFile, clickFile, loadFiles, changeMode, deleteFile } from '../actions'
 import Editor from '../components/Editor'
 import Filer from '../components/Filer'
 import Header from '../components/Header'
@@ -19,7 +19,9 @@ class App extends React.Component {
         <Header
           isPreview={uiStatus.get('isPreview')}
           onSaved={() => dispatch(saveFile(repository, currentFile, currentContent))}
-          onChangeMode={() => dispatch(changeMode())}>
+          onChangeMode={() => dispatch(changeMode())}
+          onDelete={() => dispatch(deleteFile(repository, currentFile))}
+          onCreate={() => dispatch()}>
         </Header>
         <div className='content'>
           <Filer

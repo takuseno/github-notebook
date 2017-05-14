@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import dialogs from './dialogs'
 import repository from './repository'
 import files from './files'
 import currentFile from './currentFile'
@@ -10,5 +11,6 @@ export default combineReducers({
   files,
   currentFile,
   currentContent,
-  uiStatus
+  uiStatus,
+  dialogs
 })
