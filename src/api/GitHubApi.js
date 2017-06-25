@@ -45,3 +45,49 @@ export const getFiles = (repository) => {
     }) 
   })
 }
+
+export const getOrganizations = () => {
+  return new Promise((resolve, reject) => {
+    client.me().orgs((err, data, headers) => {
+      resolve(data)
+    })
+  })
+}
+
+export const getUserRepos = () => {
+  let repos = []
+  return new Promise((resolve, reject) => {
+    Promise.resolve(undefined).then(function loop (page) {
+      if (page === undefined) {
+        page = 1
+      }
+      client.me().repos(page, (err, data, headers) => {
+        repos = repos.concat(data)
+        if (data.nextUrl === undefined) {
+          resolve(repos)
+        } else {
+          loop(page + 1)
+        }
+      })
+    })
+  })
+}
+
+export const getOrgRepos = (org) => {
+  let repos = []
+  return new Promise((resolve, reject) => {
+    Promise.resolve(undefined).then(function loop (page) {
+      if (page === undefined) {
+        page = 1
+      }
+      client.org(org).repos(page, (err, data, headers) => {
+        repos = repos.concat(data)
+        if (data.nextUrl === undefined) {
+          resolve(repos)
+        } else {
+          loop(page + 1)
+        }
+      })
+    })
+  })
+}

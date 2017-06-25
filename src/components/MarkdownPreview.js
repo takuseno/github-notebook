@@ -19,9 +19,9 @@ const renderMarkdown = (code) => {
       }
       return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>'
     }
-  }).use(MarkdownMath, {
-    renderingOptions: { decimalMark: ',' }
-  })
+  })//.use(MarkdownMath, {
+ //   renderingOptions: { decimalMark: ',' }
+  //})
   return {
     __html: md.render(code)
   }

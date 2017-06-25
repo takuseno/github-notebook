@@ -1,9 +1,22 @@
 import React, { PropTypes } from 'react'
 import '../styles/header.css'
 
-const Header = ({ isPreview, onSaved, onChangeMode, onDelete, onCreate }) => (
+const Header = ({ orgs, repos, isPreview, onSaved, onChangeMode, onDelete, onCreate }) => (
   <div className='header'>
-    <select
+    <select>
+      {orgs.map((org) => {
+        return (
+          <option>{org}</option>
+        )
+      })}
+    </select>
+    <select>
+      {repos.map((repo) => {
+        return (
+          <option>{repo}</option>
+        )
+      })}
+    </select>
     <button onClick={() => onSaved()}>Save</button>
     <button
       onClick={() => onChangeMode()}>

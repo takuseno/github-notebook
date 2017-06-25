@@ -107,6 +107,67 @@ export function loadFiles (repository) {
   }
 }
 
+export function loadOrgs () {
+  return (dispatch) => {
+    dispatch({
+      type: 'REQUEST_ORGANIZATIONS'
+    })
+    return GitHubApi.getOrganizations()
+      .then(data => {
+        const names = data.map((org) => org.login)
+        dispatch({
+          type: 'RECEIVE_ORGANIZATIONS',
+          orgs: names
+        })
+      })
+  }
+}
+
+export function loadOrgRepos (org) {
+  return (dispatch) => {
+    dispatch({
+      type: 'REQUEST_ORG_REPOSITORIES',
+      organization: org
+    })
+    return GitHubApi.getOrgRepos(org)
+      .then(data => {
+        const names = data.map((repo) => repo.name)
+        dispatch({
+          type: 'RECEIVE_ORG_REPOSITORIES',
+          repos: names
+        })
+      })
+  }
+}
+
+export function loadUserRepos () {
+  return (dispatch) => {
+    dispatch({
+      type: 'REQUEST_USER_REPOSITORIES'
+    })
+    return GitHubApi.getUserRepos()
+      .then(data => {
+        const names = data.map((repo) => repo.name)
+        dispatch({
+          type: 'RECEIVE_USER_REPOSITORIES',
+          repos: names
+        })
+      })
+  }
+}
+
+export function showCreateFileDialog () {
+  return {
+    type: 'SHOW_CREATE_FILE_DIALOG'
+  }
+}
+
+export function hideCreateFileDialog () {
+  return {
+    type: 'HIDE_CREATE_FILE_DIALOG'
+  }
+}
+
 export function changeMode () {
   return {
     type: 'CHANGE_MODE'
