@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { saveFile, updateFile, clickFile, loadFiles, changeMode, deleteFile, createFile, loadOrgs, loadUserRepos, loadOrgRepos, showCreateFileDialog, hideCreateFileDialog } from '../actions'
+import { saveFile, updateFile, clickFile, loadFiles, changeMode, deleteFile, createFile, loadOrgs, loadRepos, loadUserRepos, loadOrgRepos, showCreateFileDialog, hideCreateFileDialog } from '../actions'
 import Editor from '../components/Editor'
 import Filer from '../components/Filer'
 import Header from '../components/Header'
@@ -10,13 +10,14 @@ import '../styles/app.css'
 class App extends React.Component {
   componentDidMount () {
     const { repository, dispatch } = this.props
-    dispatch(loadFiles(repository))
+    dispatch(loadFiles(`takuseno/${repository}`))
     dispatch(loadOrgs())
     dispatch(loadUserRepos())
   }
 
   render () {
-    const { orgs, repos, files, repository, currentFile, currentContent, uiStatus, dialogs, dispatch } = this.props
+    const { orgs, repos, files, repository, organization, currentFile, currentContent, uiStatus, dialogs, userInfo, dispatch } = this.props
+    const base = organization === null ? userInfo.get('userName') : organization
     return (
       <div className='app'>
         <Header
@@ -26,7 +27,9 @@ class App extends React.Component {
           onSaved={() => dispatch(saveFile(repository, currentFile, currentContent))}
           onChangeMode={() => dispatch(changeMode())}
           onDelete={() => dispatch(deleteFile(repository, currentFile))}
-          onCreate={() => dispatch(showCreateFileDialog())}>
+          onCreate={() => dispatch(showCreateFileDialog())}
+          onChangeOrg={(org) => dispatch(loadRepos(org, userInfo.get('userName')))}
+          onChangeRepo={(repo) => dispatch(loadFiles(`${base}/${repo}`))}>
         </Header>
         <div className='content'>
           <Filer
@@ -41,7 +44,7 @@ class App extends React.Component {
         </div>
         <div className='dialogs'>
           <CreateFileDialog
-            isShowed={dialogs.createFileDialog.get('isShowed')}
+            isShowed={uiStatus.get('isCreateFileDialogShowed')}
             onSave={() => dispatch(createFile('test'))}
             onCancel={() => dispatch(hideCreateFileDialog())}>
           </CreateFileDialog>
@@ -60,7 +63,9 @@ const mapStateToProps = (state) => {
     uiStatus: state.uiStatus,
     orgs: state.orgs,
     dialogs: state.dialogs,
-    repos: state.repos
+    repos: state.repos,
+    userInfo: state.userInfo,
+    organization: state.organization
   }
 }
 

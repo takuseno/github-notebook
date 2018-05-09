@@ -123,6 +123,13 @@ export function loadOrgs () {
   }
 }
 
+export function loadRepos (org, userName) {
+  if (org == userName) {
+    return loadUserRepos()
+  }
+  return loadOrgRepos(org)
+}
+
 export function loadOrgRepos (org) {
   return (dispatch) => {
     dispatch({

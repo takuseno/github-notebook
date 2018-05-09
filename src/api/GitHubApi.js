@@ -61,7 +61,7 @@ export const getUserRepos = () => {
       if (page === undefined) {
         page = 1
       }
-      client.me().repos(page, (err, data, headers) => {
+      client.me().repos({page: page, type: 'owner'}, (err, data, headers) => {
         repos = repos.concat(data)
         if (data.nextUrl === undefined) {
           resolve(repos)

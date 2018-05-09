@@ -7,6 +7,8 @@ import files from './files'
 import currentFile from './currentFile'
 import currentContent from './currentContent'
 import uiStatus from './uiStatus'
+import userInfo from './userInfo'
+import organization from './organization'
 
 export default combineReducers({
   repository,
@@ -16,5 +18,7 @@ export default combineReducers({
   currentFile,
   currentContent,
   uiStatus,
-  dialogs
+  dialogs,
+  userInfo,
+  organization
 })
