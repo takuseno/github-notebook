@@ -2,7 +2,7 @@ export default (state = [], action) => {
   switch (action.type) {
     case 'RECEIVE_CREATE_FILE':
       state.push(action.file)
-      return state
+      return state.slice()
 
     case 'RECEIVE_DELETE_FILE':
       return state.filter(file => file.path !== action.file.path)

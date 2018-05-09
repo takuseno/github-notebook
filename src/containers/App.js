@@ -45,7 +45,7 @@ class App extends React.Component {
         <div className='dialogs'>
           <CreateFileDialog
             isShowed={uiStatus.get('isCreateFileDialogShowed')}
-            onSave={() => dispatch(createFile('test'))}
+            onSave={(name) => dispatch(createFile(repository, name))}
             onCancel={() => dispatch(hideCreateFileDialog())}>
           </CreateFileDialog>
         </div>

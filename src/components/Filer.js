@@ -11,7 +11,7 @@ const Filer = ({ files, onClick }) => (
   <ul className='filer'>
     {files.map(file =>
       <Row
-        key={file.sha}
+        key={file.path + file.sha}
         file={file}
         onClick={onClick}>
       </Row>

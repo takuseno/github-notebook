@@ -15,7 +15,7 @@ export const updateContents = (repository, file, content) => {
 export const createContents = (repository, path) => {
   return new Promise((resolve, reject) => {
     const message = `CREATE ${path}`
-    client.repo(repository).createContents(path, message, (err, data, headers) => {
+    client.repo(repository).createContents(path, message, '', (err, data, headers) => {
       resolve(data)
     })
   })

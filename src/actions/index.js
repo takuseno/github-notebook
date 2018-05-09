@@ -42,11 +42,11 @@ export function createFile (repository, path) {
           path: data.content.path,
           sha: data.content.sha
         }
-        dispatch(() => ({
+        dispatch({
           type: 'RECEIVE_CREATE_FILE',
           repository: repository,
           file: file
-        }))
+        })
       })
   }
 }
