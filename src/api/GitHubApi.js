@@ -1,67 +1,77 @@
 import * as github from 'octonode'
+import * as SuperAgent from 'superagent'
+import config from '../../config.json'
 
-const client = github.client('')
-
-export const updateContents = (repository, file, content) => {
+export const updateContents = (repository, file, content, token) => {
   return new Promise((resolve, reject) => {
     const message = `UPDATE ${file.path}`
-    client.repo(repository)
+    github.client(token).repo(repository)
       .updateContents(file.path, message, content, file.sha, (err, data, headers) => {
         resolve(data)
       })
   })
 }
 
-export const createContents = (repository, path) => {
+export const createContents = (repository, path, token) => {
   return new Promise((resolve, reject) => {
     const message = `CREATE ${path}`
-    client.repo(repository).createContents(path, message, '', (err, data, headers) => {
+    github.client(token)
+      .repo(repository)
+      .createContents(path, message, '', (err, data, headers) => {
       resolve(data)
     })
   })
 }
 
-export const deleteContents = (repository, file) => {
+export const deleteContents = (repository, file, token) => {
   return new Promise((resolve, reject) => {
     const message = `DELETE ${file.path}`
-    client.repo(repository).deleteContents(file.path, message, file.sha, (err, data, headers) => {
+    github.client(token)
+      .repo(repository)
+      .deleteContents(file.path, message, file.sha, (err, data, headers) => {
       resolve(data)
     })
   })
 }
 
-export const getContents = (repository, file) => {
+export const getContents = (repository, file, token) => {
   return new Promise((resolve, reject) => {
-    client.repo(repository).contents(file.path, (err, data, headers) => {
+    github.client(token)
+      .repo(repository)
+      .contents(file.path, (err, data, headers) => {
       resolve(data)
     }) 
   })
 }
 
-export const getFiles = (repository) => {
+export const getFiles = (repository, token) => {
   return new Promise((resolve, reject) => {
-    client.repo(repository).tree('master', (err, data, headers) => {
+    github.client(token)
+      .repo(repository)
+      .tree('master', (err, data, headers) => {
       resolve(data)
     }) 
   })
 }
 
-export const getOrganizations = () => {
+export const getOrganizations = (token) => {
   return new Promise((resolve, reject) => {
-    client.me().orgs((err, data, headers) => {
+    github.client(token).me().orgs((err, data, headers) => {
       resolve(data)
     })
   })
 }
 
-export const getUserRepos = () => {
+export const getUserRepos = (token) => {
   let repos = []
   return new Promise((resolve, reject) => {
     Promise.resolve(undefined).then(function loop (page) {
       if (page === undefined) {
         page = 1
       }
-      client.me().repos({page: page, type: 'owner'}, (err, data, headers) => {
+      github.client(token)
+        .me()
+        .repos({page: page, type: 'owner'}, (err, data, headers) => {
         repos = repos.concat(data)
         if (data.nextUrl === undefined) {
           resolve(repos)
@@ -73,14 +83,14 @@ export const getUserRepos = () => {
   })
 }
 
-export const getOrgRepos = (org) => {
+export const getOrgRepos = (org, token) => {
   let repos = []
   return new Promise((resolve, reject) => {
     Promise.resolve(undefined).then(function loop (page) {
       if (page === undefined) {
         page = 1
       }
-      client.org(org).repos(page, (err, data, headers) => {
+      github.client(token).org(org).repos(page, (err, data, headers) => {
         repos = repos.concat(data)
         if (data.nextUrl === undefined) {
           resolve(repos)
@@ -88,6 +98,35 @@ export const getOrgRepos = (org) => {
           loop(page + 1)
         }
       })
+    })
+  })
+}
+
+export const getToken = (code) => {
+  github.auth.config({
+    id: config.client_id,
+    secret: config.client_secret
+  })
+  console.log('hello')
+  return new Promise((resolve, reject) => {
+    SuperAgent.post('https://github.com/login/oauth/access_token')
+      .type('form')
+//      .set('Access-Control-Allow-Origin', '*')
+      .send({
+        client_id: config.client_id,
+        client_secret: config.client_secret,
+        code: code
+      }).then(res => {
+        console.log(res)
+        resolve(res.access_token)
+      })
+  })
+}
+
+export const getInfo = (token) => {
+  return new Promise((resolve, reject) => {
+    github.client(token).me().info((err, data, headers) => {
+      resolve(data)
     })
   })
 }

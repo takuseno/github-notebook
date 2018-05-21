@@ -1,7 +1,18 @@
 import React, { PropTypes } from 'react'
 import '../styles/header.css'
 
-const Header = ({ orgs, repos, isPreview, onSaved, onChangeMode, onDelete, onCreate, onChangeOrg, onChangeRepo }) => (
+const Header = ({
+  orgs,
+  repos,
+  isPreview,
+  onSaved,
+  onChangeMode,
+  onDelete,
+  onCreate,
+  onChangeOrg,
+  onChangeRepo,
+  onClickLogoff
+}) => (
   <div className='header'>
     <select onChange={(e) => onChangeOrg(e.target.value)}>
       {orgs.map((org) => {
@@ -17,13 +28,14 @@ const Header = ({ orgs, repos, isPreview, onSaved, onChangeMode, onDelete, onCre
         )
       })}
     </select>
-    <button onClick={() => onSaved()}>Save</button>
+    <button onClick={() => onSaved()}>SAVE</button>
     <button
       onClick={() => onChangeMode()}>
-      {isPreview ? 'Edit' : 'Preview'}
+      {isPreview ? 'EDIT' : 'PREVIEW'}
     </button>
-    <button onClick={() => onDelete()}>Delete</button>
-    <button onClick={() => onCreate()}>Create</button>
+    <button onClick={() => onDelete()}>DELETE</button>
+    <button onClick={() => onCreate()}>CREATE</button>
+    <button onClick={() => onClickLogoff()}>LOGOFF</button>
   </div>
 )
 

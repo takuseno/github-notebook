@@ -1,6 +1,7 @@
 import * as GitHubApi from '../api/GitHubApi'
+import config from '../../config.json'
 
-export function saveFile (repository, file, content) {
+export function saveFile (repository, file, content, token) {
   return (dispatch) => {
     dispatch(() => ({
       type: 'REQUEST_SAVE_FILE',
@@ -8,7 +9,7 @@ export function saveFile (repository, file, content) {
       file: file,
       content: content
     }))
-    return GitHubApi.updateContents(repository, file, content)
+    return GitHubApi.updateContents(repository, file, content, token)
       .then(data => {
         file.sha = data.content.sha
         dispatch(() => ({
@@ -29,14 +30,14 @@ export function updateFile (file, content) {
   }
 }
 
-export function createFile (repository, path) {
+export function createFile (repository, path, token) {
   return (dispatch) => {
     dispatch(() => ({
       type: 'REQUEST_CREATE_FILE',
       repository: repository,
       path: path
     }))
-    return GitHubApi.createContents(repository, path)
+    return GitHubApi.createContents(repository, path, token)
       .then((data) => {
         const file = {
           path: data.content.path,
@@ -51,14 +52,14 @@ export function createFile (repository, path) {
   }
 }
 
-export function deleteFile (repository, file) {
+export function deleteFile (repository, file, token) {
   return (dispatch) => {
     dispatch({
       type: 'REQUEST_DELETE_FILE',
       repository: repository,
       file: file
     })
-    return GitHubApi.deleteContents(repository, file)
+    return GitHubApi.deleteContents(repository, file, token)
       .then(data => {
         dispatch({
           type: 'RECEIVE_DELETE_FILE',
@@ -69,14 +70,14 @@ export function deleteFile (repository, file) {
   }
 }
 
-export function clickFile (repository, file) {
+export function clickFile (repository, file, token) {
   return (dispatch) => {
     dispatch({
       type: 'REQUEST_LOAD_CONTENT',
       repository: repository,
       file: file
     })
-    return GitHubApi.getContents(repository, file)
+    return GitHubApi.getContents(repository, file, token)
       .then(data => {
         dispatch({
           type: 'RECEIVE_LOAD_CONTENT',
@@ -88,13 +89,13 @@ export function clickFile (repository, file) {
   }
 }
 
-export function loadFiles (repository) {
+export function loadFiles (repository, token) {
   return (dispatch) => {
     dispatch({
       type: 'REQUEST_LOAD_FILES',
       repository: repository
     })
-    return GitHubApi.getFiles(repository)
+    return GitHubApi.getFiles(repository, token)
       .then(data => {
         const files = data.tree
           .filter((file) => file.type === 'blob')
@@ -107,12 +108,12 @@ export function loadFiles (repository) {
   }
 }
 
-export function loadOrgs () {
+export function loadOrgs (token) {
   return (dispatch) => {
     dispatch({
       type: 'REQUEST_ORGANIZATIONS'
     })
-    return GitHubApi.getOrganizations()
+    return GitHubApi.getOrganizations(token)
       .then(data => {
         const names = data.map((org) => org.login)
         dispatch({
@@ -123,20 +124,20 @@ export function loadOrgs () {
   }
 }
 
-export function loadRepos (org, userName) {
+export function loadRepos (org, userName, token) {
   if (org == userName) {
-    return loadUserRepos()
+    return loadUserRepos(token)
   }
-  return loadOrgRepos(org)
+  return loadOrgRepos(org, token)
 }
 
-export function loadOrgRepos (org) {
+export function loadOrgRepos (org, token) {
   return (dispatch) => {
     dispatch({
       type: 'REQUEST_ORG_REPOSITORIES',
       organization: org
     })
-    return GitHubApi.getOrgRepos(org)
+    return GitHubApi.getOrgRepos(org, token)
       .then(data => {
         const names = data.map((repo) => repo.name)
         dispatch({
@@ -147,12 +148,12 @@ export function loadOrgRepos (org) {
   }
 }
 
-export function loadUserRepos () {
+export function loadUserRepos (token) {
   return (dispatch) => {
     dispatch({
       type: 'REQUEST_USER_REPOSITORIES'
     })
-    return GitHubApi.getUserRepos()
+    return GitHubApi.getUserRepos(token)
       .then(data => {
         const names = data.map((repo) => repo.name)
         dispatch({
@@ -178,5 +179,45 @@ export function hideCreateFileDialog () {
 export function changeMode () {
   return {
     type: 'CHANGE_MODE'
+  }
+}
+
+export function authenticate (code) {
+  return (dispatch) => {
+    dispatch({
+      type: 'AUTHENTICATE'
+    })
+    let tokenHolder = ''
+    return GitHubApi.getToken(code)
+      .then(token => {
+        tokenHolder = token
+        return GitHubApi.getInfo(token)
+      }).then(data => {
+        dispatch({
+          type: 'AUTHENTICATED',
+          token: tokenHolder,
+          userName: data.login
+        })
+        boot(tokenHolder, data.login)(dispatch)
+      })
+  }
+}
+
+export function boot (token, name) {
+  return (dispatch) => {
+    //dispatch(loadFiles(`${name}/${repository}`, token))
+    dispatch(loadOrgs(token))
+    dispatch(loadUserRepos(token))
+  }
+}
+
+// this function has sideeffects!!
+export function logoff () {
+  return (dispatch) => {
+    dispatch({
+      type: 'LOGOFF'
+    })
+    localStorage.clear()
+    window.location.href = config.base_url
   }
 }

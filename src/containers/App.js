@@ -1,40 +1,84 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { saveFile, updateFile, clickFile, loadFiles, changeMode, deleteFile, createFile, loadOrgs, loadRepos, loadUserRepos, loadOrgRepos, showCreateFileDialog, hideCreateFileDialog } from '../actions'
+import {
+  saveFile,
+  updateFile,
+  clickFile,
+  loadFiles,
+  changeMode,
+  deleteFile,
+  createFile,
+  loadOrgs,
+  loadRepos,
+  loadUserRepos,
+  loadOrgRepos,
+  showCreateFileDialog,
+  hideCreateFileDialog,
+  authenticate,
+  boot,
+  logoff
+} from '../actions'
 import Editor from '../components/Editor'
 import Filer from '../components/Filer'
 import Header from '../components/Header'
 import CreateFileDialog from '../components/dialogs/CreateFileDialog'
 import '../styles/app.css'
+import config from '../../config.json'
 
 class App extends React.Component {
   componentDidMount () {
-    const { repository, dispatch } = this.props
-    dispatch(loadFiles(`takuseno/${repository}`))
-    dispatch(loadOrgs())
-    dispatch(loadUserRepos())
+    const { repository, userInfo, dispatch } = this.props
+    const url = new URL(window.location.href)
+    if (url.searchParams.has('code') === true) {
+      dispatch(authenticate(url.searchParams.get('code')))
+    } else if (userInfo.get('token') === null) {
+      let url = 'https://github.com/login/oauth/authorize'
+      url += '?client_id=' + config.client_id
+      url += '&redirect_uri=' + config.redirect_uri
+      url += '&scope=' + config.scope
+      window.location.href = url
+    } else {
+      boot(userInfo.get('token'), userInfo.get('userName'))
+    }
   }
 
   render () {
-    const { orgs, repos, files, repository, organization, currentFile, currentContent, uiStatus, dialogs, userInfo, dispatch } = this.props
+    const {
+      orgs,
+      repos,
+      files,
+      repository,
+      organization,
+      currentFile,
+      currentContent,
+      uiStatus,
+      dialogs,
+      userInfo,
+      dispatch
+    } = this.props
     const base = organization === null ? userInfo.get('userName') : organization
+    const token = userInfo.get('token')
+    const userName = userInfo.get('userName')
     return (
       <div className='app'>
         <Header
           orgs={orgs}
           repos={repos}
           isPreview={uiStatus.get('isPreview')}
-          onSaved={() => dispatch(saveFile(repository, currentFile, currentContent))}
+          onSaved={() => dispatch(
+            saveFile(repository,currentFile, currentContent, token)
+          )}
           onChangeMode={() => dispatch(changeMode())}
-          onDelete={() => dispatch(deleteFile(repository, currentFile))}
+          onDelete={() => dispatch(deleteFile(repository, currentFile, token))}
           onCreate={() => dispatch(showCreateFileDialog())}
-          onChangeOrg={(org) => dispatch(loadRepos(org, userInfo.get('userName')))}
-          onChangeRepo={(repo) => dispatch(loadFiles(`${base}/${repo}`))}>
+          onChangeOrg={(org) => dispatch(loadRepos(org, userName, token))}
+          onChangeRepo={(repo) => dispatch(loadFiles(`${base}/${repo}`, token))}
+          onClickLogoff={() => dispatch(logoff())}>
         </Header>
         <div className='content'>
           <Filer
             files={files}
-            onClick={(file) => dispatch(clickFile(repository, file))}>
+            onClick={(file) => dispatch(clickFile(repository, file, token))}>
           </Filer>
           <Editor
             isPreview={uiStatus.get('isPreview')}
@@ -45,7 +89,7 @@ class App extends React.Component {
         <div className='dialogs'>
           <CreateFileDialog
             isShowed={uiStatus.get('isCreateFileDialogShowed')}
-            onSave={(name) => dispatch(createFile(repository, name))}
+            onSave={(name) => dispatch(createFile(repository, name, token))}
             onCancel={() => dispatch(hideCreateFileDialog())}>
           </CreateFileDialog>
         </div>
