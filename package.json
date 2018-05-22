@@ -10,7 +10,7 @@
     "build": "npm run build-css & react-scripts build",
     "build-css": "node-sass src/styles/ -o src/styles/",
     "electron": "electron .",
-    "deploy": "npm run build & gh-pages -d build"
+    "deploy": "gh-pages -d build"
   },
   "author": "",
   "license": "ISC",
