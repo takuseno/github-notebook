@@ -103,22 +103,10 @@ export const getOrgRepos = (org, token) => {
 }
 
 export const getToken = (code) => {
-  github.auth.config({
-    id: config.client_id,
-    secret: config.client_secret
-  })
-  console.log('hello')
   return new Promise((resolve, reject) => {
-    SuperAgent.post('https://github.com/login/oauth/access_token')
-      .type('form')
-//      .set('Access-Control-Allow-Origin', '*')
-      .send({
-        client_id: config.client_id,
-        client_secret: config.client_secret,
-        code: code
-      }).then(res => {
-        console.log(res)
-        resolve(res.access_token)
+    SuperAgent.get(config.gatekeeper_url + '/' + code)
+      .then(res => {
+        resolve(res.body.token)
       })
   })
 }

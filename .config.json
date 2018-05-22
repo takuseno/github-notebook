@@ -1,7 +1,7 @@
 {
   "client_id": "",
-  "client_secret": "",
   "redirect_uri": "http://localhost:3000",
   "scope": "user%20repo",
-  "base_url": "http://localhost:3000"
+  "base_url": "http://localhost:3000",
+  "gatekeeper_url": ""
 }
