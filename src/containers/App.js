@@ -38,7 +38,7 @@ class App extends React.Component {
       url += '&scope=' + config.scope
       window.location.href = url
     } else {
-      boot(userInfo.get('token'), userInfo.get('userName'))
+      dispatch(boot(userInfo.get('token'), userInfo.get('userName')))
     }
   }
 
@@ -62,7 +62,7 @@ class App extends React.Component {
     return (
       <div className='app'>
         <Header
-          orgs={orgs}
+          orgs={[userName].concat(orgs)}
           repos={repos}
           isPreview={uiStatus.get('isPreview')}
           onSaved={() => dispatch(

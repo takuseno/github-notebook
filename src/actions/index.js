@@ -126,7 +126,7 @@ export function loadOrgs (token) {
 
 export function loadRepos (org, userName, token) {
   if (org == userName) {
-    return loadUserRepos(token)
+    return loadUserRepos(userName, token)
   }
   return loadOrgRepos(org, token)
 }
@@ -148,18 +148,21 @@ export function loadOrgRepos (org, token) {
   }
 }
 
-export function loadUserRepos (token) {
+export function loadUserRepos (userName, token) {
   return (dispatch) => {
     dispatch({
-      type: 'REQUEST_USER_REPOSITORIES'
+      type: 'REQUEST_USER_REPOSITORIES',
+      userName: userName
     })
     return GitHubApi.getUserRepos(token)
       .then(data => {
         const names = data.map((repo) => repo.name)
         dispatch({
           type: 'RECEIVE_USER_REPOSITORIES',
-          repos: names
+          repos: names,
+          userName: userName
         })
+        dispatch(loadFiles(`${userName}/${names[0]}`, token))
       })
   }
 }
@@ -205,9 +208,8 @@ export function authenticate (code) {
 
 export function boot (token, name) {
   return (dispatch) => {
-    //dispatch(loadFiles(`${name}/${repository}`, token))
     dispatch(loadOrgs(token))
-    dispatch(loadUserRepos(token))
+    dispatch(loadUserRepos(name, token))
   }
 }
 

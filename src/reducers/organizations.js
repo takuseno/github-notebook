@@ -1,7 +1,7 @@
-export default (state = ['takuseno'], action) => {
+export default (state = [], action) => {
   switch (action.type) {
     case 'RECEIVE_ORGANIZATIONS':
-      return ['takuseno'].concat(action.orgs)
+      return action.orgs
     default:
       return state
   }
