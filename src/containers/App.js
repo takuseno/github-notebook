@@ -100,16 +100,16 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    files: state.files,
-    repository: state.repository,
-    currentContent: state.currentContent,
-    currentFile: state.currentFile,
+    files: state.contents.get('files'),
+    repository: state.contents.get('repository'),
+    currentContent: state.contents.get('currentContent'),
+    currentFile: state.contents.get('currentFile'),
     uiStatus: state.uiStatus,
-    orgs: state.orgs,
+    orgs: state.contents.get('organizations'),
     dialogs: state.dialogs,
-    repos: state.repos,
+    repos: state.contents.get('repositories'),
     userInfo: state.userInfo,
-    organization: state.organization
+    organization: state.contents.get('organization')
   }
 }
 
