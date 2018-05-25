@@ -1,23 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import {
-  saveFile,
-  updateFile,
-  clickFile,
-  loadFiles,
-  changeMode,
-  deleteFile,
-  createFile,
-  loadOrgs,
-  loadRepos,
-  loadUserRepos,
-  loadOrgRepos,
-  showCreateFileDialog,
-  hideCreateFileDialog,
-  authenticate,
-  boot,
-  logoff
-} from '../actions'
+import * as actions from '../actions'
 import Editor from '../components/Editor'
 import Filer from '../components/Filer'
 import Header from '../components/Header'
@@ -30,7 +13,7 @@ class App extends React.Component {
     const { repository, userInfo, dispatch } = this.props
     const url = new URL(window.location.href)
     if (url.searchParams.has('code') === true) {
-      dispatch(authenticate(url.searchParams.get('code')))
+      dispatch(actions.authenticate(url.searchParams.get('code')))
     } else if (userInfo.get('token') === null) {
       let url = 'https://github.com/login/oauth/authorize'
       url += '?client_id=' + config.client_id
@@ -38,7 +21,7 @@ class App extends React.Component {
       url += '&scope=' + config.scope
       window.location.href = url
     } else {
-      dispatch(boot(userInfo.get('token'), userInfo.get('userName')))
+      dispatch(actions.boot(userInfo.get('token'), userInfo.get('userName')))
     }
   }
 
@@ -66,31 +49,44 @@ class App extends React.Component {
           repos={repos}
           isPreview={uiStatus.get('isPreview')}
           onSaved={() => dispatch(
-            saveFile(repository,currentFile, currentContent, token)
-          )}
-          onChangeMode={() => dispatch(changeMode())}
-          onDelete={() => dispatch(deleteFile(repository, currentFile, token))}
-          onCreate={() => dispatch(showCreateFileDialog())}
-          onChangeOrg={(org) => dispatch(loadRepos(org, userName, token))}
-          onChangeRepo={(repo) => dispatch(loadFiles(`${base}/${repo}`, token))}
-          onClickLogoff={() => dispatch(logoff())}>
+            actions.requestSaveFile(
+              repository,currentFile,
+              currentContent,
+              token
+            ))}
+          onChangeMode={() => dispatch(actions.changeMode())}
+          onDelete={() => dispatch(
+            actions.requestDeleteFile(
+              repository,
+              currentFile,
+              token
+            ))}
+          onCreate={() => dispatch(actions.showCreateFileDialog())}
+          onChangeOrg={(org) => dispatch(
+            actions.loadRepos(org, userName, token))}
+          onChangeRepo={(repo) => dispatch(
+            actions.requestLoadFiles(`${base}/${repo}`, token))}
+          onClickLogoff={() => dispatch(actions.logoff())}>
         </Header>
         <div className='content'>
           <Filer
             files={files}
-            onClick={(file) => dispatch(clickFile(repository, file, token))}>
+            onClick={(file) => dispatch(
+              actions.requestLoadContent(repository, file, token))}>
           </Filer>
           <Editor
             isPreview={uiStatus.get('isPreview')}
             content={currentContent}
-            onUpdated={(content) => dispatch(updateFile(currentFile, content))}>
+            onUpdated={(content) => dispatch(
+              actions.updateFile(currentFile, content))}>
           </Editor>
         </div>
         <div className='dialogs'>
           <CreateFileDialog
             isShowed={uiStatus.get('isCreateFileDialogShowed')}
-            onSave={(name) => dispatch(createFile(repository, name, token))}
-            onCancel={() => dispatch(hideCreateFileDialog())}>
+            onSave={(name) => dispatch(
+              actions.requestCreateFile(repository, name, token))}
+            onCancel={() => dispatch(actions.hideCreateFileDialog())}>
           </CreateFileDialog>
         </div>
       </div>
