@@ -1,5 +1,18 @@
+.sidebar {
+  overflow: hidden;
+  height: auto;
+  width: auto;
+  top: 36px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
+}
+
 .filer {
+  overflow: auto;
   width: 150px;
+  height: 100%;
   float: left;
   list-style: none;
   list-style-type: none;

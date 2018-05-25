@@ -8,15 +8,17 @@ const Row = ({ file, onClick }) => (
 )
 
 const Filer = ({ files, onClick }) => (
-  <ul className='filer'>
-    {files.map(file =>
-      <Row
-        key={file.path + file.sha}
-        file={file}
-        onClick={onClick}>
-      </Row>
-    )}
-  </ul>
+  <div className='sidebar'>
+    <ul className='filer'>
+      {files.map(file =>
+        <Row
+          key={file.path + file.sha}
+          file={file}
+          onClick={onClick}>
+        </Row>
+      )}
+    </ul>
+  </div>
 )
 
 Filer.propTypes = {
