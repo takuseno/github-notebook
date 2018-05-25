@@ -8,7 +8,7 @@ import App from './containers/App'
 import reducers from './reducers'
 
 const store = applyMiddleware(
-  thunk, api
+  api, thunk
 )(createStore)(reducers)
 
 render(

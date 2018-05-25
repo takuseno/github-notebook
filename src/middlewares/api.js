@@ -2,10 +2,11 @@ import * as GitHubApi from '../api/GitHubApi'
 import * as actions from '../actions'
 
 const api = store => next => action => {
+  console.log(action)
   next(action)
   switch (action.type) {
     case 'REQUEST_SAVE_FILE':
-      GitHubApi.updateContents(
+      return GitHubApi.updateContents(
           action.repository,
           action.file,
           action.content,
@@ -20,7 +21,7 @@ const api = store => next => action => {
         })
 
       case 'REQUEST_CREATE_FILE':
-        GitHubApi.createContents(
+        return GitHubApi.createContents(
             action.repository,
             action.path,
             action.token
@@ -36,7 +37,7 @@ const api = store => next => action => {
           })
 
       case 'REQUEST_DELETE_FILE':
-        GitHubApi.deleteContents(
+        return GitHubApi.deleteContents(
             action.repository,
             action.file,
             action.token
@@ -48,7 +49,7 @@ const api = store => next => action => {
           })
 
       case 'REQUEST_LOAD_CONTENT':
-        GitHubApi.getContents(
+        return GitHubApi.getContents(
             action.repository,
             action.file,
             action.token
@@ -61,7 +62,7 @@ const api = store => next => action => {
           })
 
       case 'REQUEST_LOAD_FILES':
-        GitHubApi.getFiles(action.repository, action.token)
+        return GitHubApi.getFiles(action.repository, action.token)
           .then(data => {
             const files = data.tree
               .filter((file) => file.type === 'blob')
@@ -69,39 +70,54 @@ const api = store => next => action => {
               action.repository,
               files
             ))
+            if (files.length > 0) {
+              store.dispatch(actions.requestLoadContent(
+                action.repository,
+                files[0],
+                action.token
+              ))
+            }
           })
 
       case 'REQUEST_ORGANIZATIONS':
-        GitHubApi.getOrganizations(action.token)
+        return GitHubApi.getOrganizations(action.token)
           .then(data => {
             const names = data.map((org) => org.login)
             next(actions.receiveOrganizations(names))
           })
 
       case 'REQUEST_ORG_REPOSITORIES':
-        GitHubApi.getOrgRepos(action.org, action.token)
+        return GitHubApi.getOrgRepos(action.org, action.token)
           .then(data => {
             const names = data.map((repo) => repo.name)
             next(actions.receiveOrgRepositories(names))
+            if (names.length > 0) {
+              store.dispatch(actions.requestLoadFiles(
+                `${action.org}/${names[0]}`,
+                action.token
+              ))
+            }
           })
 
       case 'REQUEST_USER_REPOSITORIES':
-        GitHubApi.getUserRepos(action.token)
+        return GitHubApi.getUserRepos(action.token)
           .then(data => {
             const names = data.map((repo) => repo.name)
             next(actions.receiveUserRepositories(
               names,
               action.userName
             ))
-            next(actions.requestLoadFiles(
-              `${action.userName}/${names[0]}`,
-              action.token
-            ))
+            if (names.length > 0) {
+              store.dispatch(actions.requestLoadFiles(
+                `${action.userName}/${names[0]}`,
+                action.token
+              ))
+            }
           })
 
       case 'AUTHENTICATE':
         let tokenHolder = ''
-        GitHubApi.getToken(action.code)
+        return GitHubApi.getToken(action.code)
           .then(token => {
             tokenHolder = token
             return GitHubApi.getInfo(token)
