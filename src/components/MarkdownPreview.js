@@ -27,8 +27,9 @@ const renderMarkdown = (code) => {
   }
 }
 
-const MarkdownPreview = ({ code }) => (
+const MarkdownPreview = ({ code, changeMode }) => (
   <div 
+    onClick={() => changeMode()}
     className='markdown-preview'>
     <div className='preview'
       dangerouslySetInnerHTML={renderMarkdown(code)}>

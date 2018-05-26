@@ -77,6 +77,7 @@ class App extends React.Component {
           <Editor
             isPreview={uiStatus.get('isPreview')}
             content={currentContent}
+            changeMode={() => dispatch(actions.changeMode())}
             onUpdated={(content) => dispatch(
               actions.updateFile(currentFile, content))}>
           </Editor>
