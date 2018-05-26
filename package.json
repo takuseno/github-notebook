@@ -10,7 +10,8 @@
     "build": "npm run build-css & react-scripts build",
     "build-css": "node-sass src/styles/ -o src/styles/",
     "electron": "electron .",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "build-electron": "electron-packager . github-notebook --platform=darwin --arch=x64 --electron-version=1.7.11 --app-version=0.1"
   },
   "author": "",
   "license": "ISC",
@@ -18,6 +19,7 @@
     "ascii2mathml": "^0.5.4",
     "codemirror": "^5.25.0",
     "electron": "^1.6.2",
+    "electron-packager": "^12.1.0",
     "gh-pages": "^1.1.0",
     "highlightjs": "^9.10.0",
     "immutable": "^3.8.1",
