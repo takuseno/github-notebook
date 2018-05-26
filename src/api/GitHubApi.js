@@ -73,7 +73,7 @@ export const getUserRepos = (token) => {
         .me()
         .repos({page: page, type: 'owner'}, (err, data, headers) => {
         repos = repos.concat(data)
-        if (data.nextUrl === undefined) {
+        if (data.length === 0) {
           resolve(repos)
         } else {
           loop(page + 1)
@@ -92,7 +92,7 @@ export const getOrgRepos = (org, token) => {
       }
       github.client(token).org(org).repos(page, (err, data, headers) => {
         repos = repos.concat(data)
-        if (data.nextUrl === undefined) {
+        if (data.length === 0) {
           resolve(repos)
         } else {
           loop(page + 1)
