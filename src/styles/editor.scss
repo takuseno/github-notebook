@@ -11,8 +11,11 @@
     bottom: 0;
     left: 150px;
     right: 0;
+    padding: 3px;
     .CodeMirror {
       height: 100%;
+      padding: 0;
+      border: none;
     }
   }
 }

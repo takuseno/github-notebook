@@ -1,4 +1,6 @@
 .header {
+  border: 1px solid #ecf0f1;
+
   button {
     height: 30px;
     width: 80px;
@@ -11,5 +13,23 @@
       background: #03A9F4;
       color: #fff;
     }
+  }
+
+  select {
+    height: 30px;
+    background:  #fff;
+    border: 0px;
+    outline: 1px solid #03A9F4;
+    outline-offset: -1px;
+    color: #03A9F4;
+    margin: 3px;
+    &:hover {
+      background: #03A9F4;
+      color: #fff;
+    }
+  }
+
+  .logoff {
+    float: right;
   }
 }

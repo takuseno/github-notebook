@@ -1,9 +1,8 @@
 import React, { PropTypes } from 'react'
-import CodeMirror from 'react-codemirror'
 import MarkdownPreview from './MarkdownPreview'
+import SimpleMDE from 'react-simplemde-editor'
 import '../styles/editor.css'
-require('codemirror/lib/codemirror.css')
-require('codemirror/mode/markdown/markdown')
+import "simplemde/dist/simplemde.min.css"
 
 const Editor = ({ content, isPreview, onUpdated }) => (
   <div
@@ -13,11 +12,12 @@ const Editor = ({ content, isPreview, onUpdated }) => (
           ? <MarkdownPreview
             code={content}>
           </MarkdownPreview>
-          : <CodeMirror
-            value={content}
-            onChange={onUpdated}
-            options={{mode: 'markdown', lineNumbers: true}}>
-          </CodeMirror>
+          : <div>
+            <SimpleMDE
+              value={content}
+              onChange={onUpdated}
+              options={{toolbar: false, status: false}}/>
+            </div>
         }
       </div>
   </div>

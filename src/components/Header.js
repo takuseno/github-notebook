@@ -35,7 +35,7 @@ const Header = ({
     </button>
     <button onClick={() => onDelete()}>DELETE</button>
     <button onClick={() => onCreate()}>CREATE</button>
-    <button onClick={() => onClickLogoff()}>LOGOFF</button>
+    <button className='logoff' onClick={() => onClickLogoff()}>LOGOFF</button>
   </div>
 )
 
