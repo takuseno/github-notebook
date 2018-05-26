@@ -124,8 +124,8 @@ const api = store => next => action => {
             return GitHubApi.getInfo(token)
           }).then(data => {
             next(actions.authenticated(tokenHolder, data.login))
-            next(actions.requestOrganizations(tokenHolder))
-            next(actions.requestUserRepositories(data.login, tokenHolder))
+            store.dispatch(actions.requestOrganizations(tokenHolder))
+            store.dispatch(actions.requestUserRepositories(data.login, tokenHolder))
           })
   }
 }
