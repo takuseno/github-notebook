@@ -66,6 +66,7 @@ const api = store => next => action => {
           .then(data => {
             const files = data.tree
               .filter((file) => file.type === 'blob')
+              .filter((file) => /.+\.md$/.test(file.path))
             next(actions.receiveLoadFiles(
               action.repository,
               files
