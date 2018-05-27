@@ -1,8 +1,7 @@
 import React from 'react'
 import MarkdownIt from 'markdown-it'
 import hljs from 'highlightjs'
-import katex from 'katex'
-import texmatch from 'markdown-it-texmath'
+import katex from 'markdown-it-katex'
 import '../styles/markdown-preview.css'
 import '../styles/monokai.css'
 import 'katex/dist/katex.css'
@@ -21,7 +20,7 @@ const renderMarkdown = (code) => {
       }
       return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>'
     }
-  }).use(texmatch.use(katex), {delimiters:'dollars'})
+  }).use(katex)
   return {
     __html: md.render(code)
   }
