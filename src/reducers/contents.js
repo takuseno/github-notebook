@@ -33,7 +33,7 @@ export default (state = Immutable.OrderedMap({
         .set('currentFile', action.file)
 
     case 'REQUEST_ORG_REPOSITORIES':
-      return state.set('organization', action.organization)
+      return state.set('organization', action.org)
 
     case 'REQUEST_USER_REPOSITORIES':
       return state.set('organization', action.userName)
