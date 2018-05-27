@@ -19,9 +19,16 @@ const Editor = ({ content, isPreview, onUpdated, changeMode }) => (
               value={content}
               onChange={onUpdated}
               extraKeys={{
-                "Ctrl-C": (cm) => changeMode()
+                "Ctrl-M": (cm) => changeMode()
               }}
-              options={{toolbar: false, status: false}}/>
+              options={{
+                indentWithTabs: false,
+                toolbar: false,
+                status: false,
+                autofocus: true,
+                spellChecker: false,
+                placeholder: 'Write something here...'
+              }}/>
             </div>
         }
       </div>
