@@ -11,15 +11,38 @@
     height: 100%;
     overflow: auto;
 
-    code {
-      border-radius: 3px;
-    }
-    p {
-      code {
-        background: #eee;
+    .wrapper {
+      padding: 12px;
+
+      pre {
+        border-radius: 3px;
+        padding: 12px;
       }
-      img {
-        max-width: 100%;
+      p {
+        code {
+          background: #eee;
+        }
+        img {
+          max-width: 100%;
+        }
+      }
+
+      table {
+        border-collapse: collapse;
+        border-spacing: 0;
+        th, td {
+          padding: 10px;
+          border: 1px solid #dfe2e5;
+          line-height: 1.5;
+        }
+      }
+
+      ul {
+        margin-left: -20px;
+      }
+
+      li {
+        margin: 6px;
       }
     }
   }
