@@ -27,6 +27,9 @@
     &:hover {
       background: #eee;
     }
+    &.active {
+      background: #eee;
+    }
     border-bottom: 1px solid #eee;
   }
 }

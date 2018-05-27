@@ -71,6 +71,7 @@ class App extends React.Component {
         <div className='content'>
           <Filer
             files={files}
+            currentFile={currentFile}
             onClick={(file) => dispatch(
               actions.requestLoadContent(repository, file, token))}>
           </Filer>
